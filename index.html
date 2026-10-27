@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PosiChat — Você não está só | Comunidade, Encontros & Vida Leve</title>
+    <meta name="description" content="PosiChat: um espaço seguro, leve e acolhedor para pessoas soropositivas partilharem histórias, fazerem novas amizades, flertarem e lembrarem que a vida segue feliz.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💜</text></svg>">
+    
+    <!-- Estilos -->
+    <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+
+    <div id="app">
+        <!-- ================================================================== -->
+        <!-- HEADER / NAVBAR SUPERIOR                                           -->
+        <!-- ================================================================== -->
+        <header class="site-header">
+            <div class="header-container">
+                <a href="#" id="nav-brand" class="brand-link" aria-label="PosiChat Página Inicial">
+                    <div class="brand-logo-icon">💜</div>
+                    <span>PosiChat</span>
+                    <span class="brand-tag">Você não está só</span>
+                </a>
+
+                <div class="header-actions">
+                    <button id="btn-nav-agenda" class="btn btn-ghost btn-sm" title="Mural de horários em que as pessoas combinam de estar nas salas">
+                        <span>🗓️</span>
+                        <span>Mural de Encontros</span>
+                    </button>
+
+                    <div id="nav-auth-container" class="flex items-center gap-2">
+                        <!-- Preenchido via JavaScript -->
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- ================================================================== -->
+        <!-- 1. PÁGINA INICIAL (HOME & ACOLHIMENTO)                             -->
+        <!-- ================================================================== -->
+        <main id="page-home" class="page active">
+            <!-- Hero Section -->
+            <section class="hero-section">
+                <div class="hero-content">
+                    <h1>PosiChat</h1>
+                    <div class="hero-tagline">Você não está só.</div>
+                    <p class="hero-subtitle">
+                        Bem-vindo(a) ao <strong>PosiChat</strong>, um espaço seguro, leve e acolhedor para pessoas soropositivas partilharem histórias, fazerem novas amizades, flertarem e lembrarem que existem muitas outras pessoas vivendo na mesma condição — e que são <strong>felizes, plenas e cheias de vida</strong>.
+                    </p>
+
+                    <div class="hero-ctas">
+                        <button id="btn-hero-enter" class="btn btn-primary">
+                            <span>💬</span>
+                            <span>Escolher uma Sala</span>
+                        </button>
+                        <button id="btn-hero-agenda" class="btn btn-ghost">
+                            <span>🗓️</span>
+                            <span>Ver Mural de Encontros</span>
+                        </button>
+                    </div>
+
+                    <div class="user-badge" style="width: fit-content;">
+                        <span>☀️</span>
+                        <span>Viva com leveza, ame sem receios e celebre sua história.</span>
+                    </div>
+                </div>
+
+                <div class="hero-media-wrap">
+                    <div class="hero-media-card">
+                        <img src="/hero-happy.jpg" alt="Amigos conversando e rindo juntos em uma cafeteria acolhedora" class="hero-media-image">
+                        <div class="hero-media-badge">
+                            <span>💜</span>
+                            <div>
+                                <strong>Vida normal, feliz e conectada:</strong>
+                                <span>Aqui sua jornada é respeitada e você pode ser 100% você.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Mural Dinâmico de Encontros Combinados (Mais Flexível e Aberto) -->
+            <section class="agenda-section" id="section-agenda">
+                <div class="agenda-header-top">
+                    <div>
+                        <h2 style="font-family: var(--font-heading); font-size: 1.9rem; font-weight: 800; margin-bottom: 0.35rem;">
+                            Mural de Encontros Combinados
+                        </h2>
+                        <p style="color: var(--text-muted); font-size: 0.95rem;">
+                            Horários marcados pela comunidade para bater papo e continuar conversas com os mesmos nicks.
+                        </p>
+                    </div>
+                    <button id="btn-open-propose-modal" class="btn btn-primary btn-sm">
+                        <span>+ Combinar um Horário</span>
+                    </button>
+                </div>
+
+                <div class="meets-grid" id="meets-grid-container">
+                    <!-- Preenchido dinamicamente com INITIAL_MEETS + Meets dos Usuários -->
+                </div>
+            </section>
+
+            <!-- Princípios Positivos do PosiChat -->
+            <section style="max-width: 1200px; margin: 0 auto; padding: 0 1.5rem 5rem 1.5rem; display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem;">
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.75rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.85rem;">📍</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Todos os Estados & Capitais</h3>
+                    <p style="color: var(--text-muted); font-size: 0.88rem;">Salas individuais para todos os estados do Brasil com suas capitais, além de Portugal (Lisboa, Norte e Sul) para conversar com quem está perto de você.</p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.75rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.85rem;">💖</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Flerte Sem Barreiras</h3>
+                    <p style="color: var(--text-muted); font-size: 0.88rem;">Um espaço natural para paquerar e conhecer alguém sem o medo da rejeição. Todos aqui entendem a mesma realidade.</p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.75rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.85rem;">☕</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Conversas do Dia a Dia</h3>
+                    <p style="color: var(--text-muted); font-size: 0.88rem;">Fale sobre trabalho, academia, filmes, viagens e hobbies. A vida é muito maior e mais bonita do que qualquer diagnóstico.</p>
+                </div>
+
+                <div style="background: var(--bg-card); border: 1px solid var(--border-subtle); border-radius: var(--radius-md); padding: 1.75rem;">
+                    <div style="font-size: 2rem; margin-bottom: 0.85rem;">🔒</div>
+                    <h3 style="font-family: var(--font-heading); font-size: 1.15rem; font-weight: 700; margin-bottom: 0.5rem;">Nicks Fixos & Sigilo</h3>
+                    <p style="color: var(--text-muted); font-size: 0.88rem;">Seu e-mail nunca é divulgado. Você escolhe seu Nick para criar laços verdadeiros e continuar conversando com seus amigos.</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- ================================================================== -->
+        <!-- 2. LOBBY DE SALAS COM FILTROS DE ESTADOS / REGIÕES                 -->
+        <!-- ================================================================== -->
+        <main id="page-lobby" class="page">
+            <div class="lobby-header">
+                <h1>Salas de Bate-Papo</h1>
+                <p>Navegue pelas salas de todos os estados do Brasil e suas capitais, além de Portugal (Lisboa, Norte e Sul) ou escolha salas temáticas.</p>
+
+                <!-- Barra de Filtros de Categoria (Estilo Bate-Papo UOL) -->
+                <div class="category-filter-bar" id="category-filter-bar">
+                    <!-- Preenchido dinamicamente via JS -->
+                </div>
+
+                <!-- Campo de Busca Rápida de Estados / Capitais -->
+                <div class="rooms-search-wrap">
+                    <input 
+                        type="text" 
+                        id="rooms-search-input" 
+                        class="rooms-search-input" 
+                        placeholder="🔍 Buscar por estado, capital ou tema (ex: São Paulo, Rio, Lisboa, Porto, Curitiba, Flerte)..."
+                        aria-label="Buscar salas por estado, capital ou tema"
+                    >
+                </div>
+            </div>
+
+            <div class="rooms-grid" id="rooms-grid-container">
+                <!-- Preenchido dinamicamente com Estados, Capitais e Temáticas -->
+            </div>
+        </main>
+
+        <!-- ================================================================== -->
+        <!-- 3. CHATROOM                                                        -->
+        <!-- ================================================================== -->
+        <main id="page-chat" class="page">
+            <div class="chat-container">
+                <div class="chat-header-bar">
+                    <div class="chat-header-left">
+                        <button id="btn-chat-back-lobby" class="btn-back-lobby">
+                            <span>←</span>
+                            <span>Salas</span>
+                        </button>
+                        <div class="chat-room-info">
+                            <h2 id="chat-current-room-title">São Paulo</h2>
+                            <p id="chat-current-room-desc">Conversa leve com a galera de SP.</p>
+                        </div>
+                    </div>
+
+                    <div class="chat-header-right flex items-center gap-2">
+                        <span class="user-badge" id="chat-room-badge" style="font-size: 0.75rem;">
+                            🟢 Sala Conectada
+                        </span>
+                    </div>
+                </div>
+
+                <div class="chat-feed" id="chat-messages-container">
+                    <!-- Mensagens inseridas dinamicamente -->
+                </div>
+
+                <div class="chat-footer">
+                    <div class="chat-social-actions">
+                        <button class="action-pill" id="btn-action-charme">💖 Mandar um Carinho</button>
+                        <button class="action-pill" id="btn-action-cafe">☕ Oferecer um Café</button>
+                        <button class="action-pill" id="btn-action-luz">✨ Desejar um Dia Lindo</button>
+                        <button class="action-pill" id="btn-action-abraço">🫂 Abraço Coletivo</button>
+                    </div>
+
+                    <form id="chat-form" class="chat-input-bar">
+                        <input 
+                            type="text" 
+                            id="chat-message-input" 
+                            class="chat-input" 
+                            placeholder="Escreva sua mensagem com carinho e leveza..." 
+                            maxlength="600"
+                            autocomplete="off"
+                            required
+                        >
+                        <button type="submit" id="btn-chat-send" class="btn-send" title="Enviar mensagem">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <line x1="22" y1="2" x2="11" y2="13"></line>
+                                <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- ================================================================== -->
+        <!-- RODAPÉ GERAL                                                       -->
+        <!-- ================================================================== -->
+        <footer class="site-footer">
+            <div class="footer-container">
+                <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span>💜</span>
+                    <span><strong>PosiChat</strong> — Você não está só. Viva, ame e seja feliz.</span>
+                </div>
+
+                <div style="display: flex; gap: 1.5rem;">
+                    <a href="#" id="link-footer-home" style="color: var(--text-muted); text-decoration: none;">Início</a>
+                    <a href="#" id="link-footer-agenda" style="color: #c084fc; text-decoration: none;">Mural de Encontros</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- MODAL DE PROPOR ENCONTRO / COMBINAR HORÁRIO                            -->
+    <!-- ====================================================================== -->
+    <div id="modal-propose-meet" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="btn-close-propose-modal" aria-label="Fechar janela">×</button>
+
+            <h3 style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; margin-bottom: 0.35rem;">
+                🗓️ Combinar um Horário com a Galera
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.86rem; margin-bottom: 1.25rem;">
+                Proponha um dia e hora em uma das salas para quem quiser entrar e conversar com você.
+            </p>
+
+            <form id="form-propose-meet">
+                <div class="form-group">
+                    <label class="form-label" for="meet-input-title">Sobre o que é o papo? (Título):</label>
+                    <input type="text" id="meet-input-title" class="form-input" placeholder="Ex: Sexta da Paquera, Café em SP, Papo dos Insones..." maxlength="50" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="meet-select-room">Em qual sala?:</label>
+                    <select id="meet-select-room" class="form-input" style="background: #11101c; color: #fff;" required>
+                        <!-- Preenchido via JavaScript -->
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="meet-input-when">Quando?:</label>
+                    <input type="text" id="meet-input-when" class="form-input" placeholder="Ex: Hoje às 21h, Sábado às 16h, Todo Domingo às 18h..." maxlength="40" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="meet-input-desc">Recado para quem for participar:</label>
+                    <input type="text" id="meet-input-desc" class="form-input" placeholder="Ex: Vamos trocar uma ideia leve, quem tiver livre aparece por lá!" maxlength="120" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 0.75rem;">
+                    Publicar no Mural de Encontros
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- MODAL DE AUTENTICAÇÃO COM NICK FIXO                                    -->
+    <!-- ====================================================================== -->
+    <div id="modal-auth" class="modal-overlay" role="dialog" aria-modal="true">
+        <div class="modal-card">
+            <button class="modal-close-btn" id="btn-close-auth-modal" aria-label="Fechar janela">×</button>
+
+            <div class="auth-tabs">
+                <button id="tab-login" class="auth-tab-btn active">Entrar com Nick</button>
+                <button id="tab-signup" class="auth-tab-btn">Registrar Nick</button>
+            </div>
+
+            <div id="auth-error-banner" class="error-banner"></div>
+
+            <button id="btn-google-auth" class="btn btn-ghost" style="width: 100%; margin-bottom: 1.25rem;">
+                <svg width="18" height="18" viewBox="0 0 24 24">
+                    <path fill="#EA4335" d="M12 5c1.6 0 3 .6 4.1 1.7l3.1-3.1C17.3 1.8 14.8 1 12 1 7.4 1 3.5 3.6 1.6 7.4l3.7 2.9C6.2 7.4 8.9 5 12 5z"/>
+                    <path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5c-.3 1.5-1.1 2.8-2.4 3.7l3.7 2.9c2.2-2 3.7-5 3.7-8.8z"/>
+                    <path fill="#FBBC05" d="M5.3 14.7c-.2-.7-.4-1.5-.4-2.7s.1-2 .4-2.7L1.6 6.4C.6 8.3 0 10.1 0 12s.6 3.7 1.6 5.6l3.7-2.9z"/>
+                    <path fill="#34A853" d="M12 23c3.2 0 6-1.1 8-3l-3.7-2.9c-1.1.7-2.5 1.2-4.3 1.2-3.1 0-5.8-2.4-6.7-5.3L1.6 16c1.9 3.8 5.8 7 10.4 7z"/>
+                </svg>
+                <span>Entrar rápido com Google</span>
+            </button>
+
+            <div style="display: flex; align-items: center; margin-bottom: 1.25rem;">
+                <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+                <span style="padding: 0 0.8rem; font-size: 0.75rem; color: var(--text-subtle);">OU COM E-MAIL E SENHA</span>
+                <div style="flex: 1; height: 1px; background: var(--border-subtle);"></div>
+            </div>
+
+            <form id="auth-email-form">
+                <div class="form-group">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <label class="form-label" for="auth-nickname">Seu Nickname Fixo:</label>
+                        <button type="button" id="btn-generate-nick" class="btn-subtle" style="font-size: 0.72rem; cursor: pointer; color: #c084fc;">
+                            🎲 Sugerir Nick Leve
+                        </button>
+                    </div>
+                    <input type="text" id="auth-nickname" class="form-input" placeholder="Ex: CaminhoDoSol, SorrisoAberto..." maxlength="30" required>
+                    <span style="font-size: 0.72rem; color: var(--text-subtle);">Seu e-mail nunca é exibido no chat.</span>
+                </div>
+
+                <div class="form-group" id="group-subnick">
+                    <label class="form-label" for="auth-subnick">Frase de Status (Opcional):</label>
+                    <input type="text" id="auth-subnick" class="form-input" placeholder="Ex: ☀️ Vivendo um dia lindo por vez..." maxlength="50">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Escolha seu Avatar:</label>
+                    <div class="avatar-picker-grid" id="avatar-picker-container">
+                        <!-- Inserido dinamicamente -->
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="auth-email">Seu E-mail (Apenas para acesso):</label>
+                    <input type="email" id="auth-email" class="form-input" placeholder="seuemail@exemplo.com" required>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="auth-password">Senha:</label>
+                    <input type="password" id="auth-password" class="form-input" placeholder="Mínimo 6 caracteres" minlength="6" required>
+                </div>
+
+                <button type="submit" id="btn-auth-submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                    Entrar no PosiChat
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script Principal -->
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>

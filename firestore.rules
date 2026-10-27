@@ -1,0 +1,129 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: /rooms/{roomId}/messages/{messageId}
+    // Document ID: Auto-generated string (e.g. via addDoc)
+    // Allowed Room IDs:
+    //   - 'global', 'desabafo', 'ansiedade', 'luto', 'gratidao', 'brasil', 'portugal'
+    //
+    // Fields:
+    //   - text: string (required, 1 to 600 characters) - Message textual body
+    //   - uid: string (required, must match request.auth.uid) - Author user identifier
+    //   - displayName: string (required, 2 to 50 characters) - Author display name
+    //   - avatar: string (required, 1 to 10 characters) - Author avatar emoji or symbol
+    //   - reactions: map (optional, max 20 keys) - Message reactions counter map
+    //   - createdAt: timestamp (required, must equal request.time) - Server timestamp
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    // Check if the requesting user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    // Check if the requesting user is the owner of the document
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Validate that roomId has a safe format (2 to 40 characters, alphanumeric, dashes or underscores)
+    function isValidRoom(roomId) {
+      return roomId is string &&
+             roomId.size() >= 2 &&
+             roomId.size() <= 40 &&
+             roomId.matches('^[a-zA-Z0-9_-]+$');
+    }
+
+    // Validate that required fields exist in data
+    function hasRequiredFields(data, fields) {
+      return data.keys().hasAll(fields);
+    }
+
+    // Validate that the document contains only allowed fields
+    function hasOnlyAllowedFields(data, fields) {
+      return data.keys().hasOnly(fields);
+    }
+
+    // Validate optional reactions map (bounded to prevent DoS payloads)
+    function isValidReactions(reactions) {
+      return reactions is map && reactions.keys().size() <= 20;
+    }
+
+    // Validate that message was created within the last 5 minutes
+    function isWithinFiveMinutes(createdAt) {
+      return createdAt is timestamp &&
+             request.time >= createdAt &&
+             request.time <= createdAt + duration.value(5, 'm');
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    // Comprehensive validator for messages
+    function isValidMessage(data) {
+      return hasRequiredFields(data, ['text', 'uid', 'displayName', 'avatar', 'createdAt']) &&
+             hasOnlyAllowedFields(data, ['text', 'uid', 'displayName', 'avatar', 'createdAt', 'reactions', 'subnick', 'isAction', 'isWhisper', 'whisperTo']) &&
+             data.text is string &&
+             data.text.size() >= 1 &&
+             data.text.size() <= 600 &&
+             data.uid is string &&
+             data.uid == request.auth.uid &&
+             data.displayName is string &&
+             data.displayName.size() >= 2 &&
+             data.displayName.size() <= 50 &&
+             data.avatar is string &&
+             data.avatar.size() >= 1 &&
+             data.avatar.size() <= 10 &&
+             data.createdAt is timestamp &&
+             data.createdAt == request.time &&
+             (!('reactions' in data) || isValidReactions(data.reactions)) &&
+             (!('subnick' in data) || (data.subnick is string && data.subnick.size() <= 60)) &&
+             (!('isAction' in data) || data.isAction is bool) &&
+             (!('isWhisper' in data) || data.isWhisper is bool) &&
+             (!('whisperTo' in data) || data.whisperTo == null || (data.whisperTo is string && data.whisperTo.size() <= 50));
+    }
+
+    // ===============================================================
+    // Security Rules
+    // ===============================================================
+
+    // Default deny all access to any collection not explicitly matched
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Security rules for chat room messages
+    match /rooms/{roomId}/messages/{messageId} {
+      // Only authenticated users can read messages, and only from allowed rooms
+      allow read: if isAuthenticated() && isValidRoom(roomId);
+
+      // Authenticated users can create messages if the schema and room are valid,
+      // and their uid matches the authenticated user ID
+      allow create: if isAuthenticated() &&
+                       isValidRoom(roomId) &&
+                       request.resource.data.uid == request.auth.uid &&
+                       isValidMessage(request.resource.data);
+
+      // Users can never edit messages once sent to ensure integrity and auditability
+      allow update: if false;
+
+      // Only the author can delete their own message within 5 minutes of creation
+      // (To disallow deletions completely, change condition to: if false;)
+      allow delete: if isAuthenticated() &&
+                       isValidRoom(roomId) &&
+                       isOwner(resource.data.uid) &&
+                       isWithinFiveMinutes(resource.data.createdAt);
+    }
+  }
+}
